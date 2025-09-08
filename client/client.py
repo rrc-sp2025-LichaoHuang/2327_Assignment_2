@@ -7,7 +7,7 @@ __author__ = "Lichao Huang"
 __version__ = "1.0.0"
 
 
-class client:
+class Client:
     def __init__(self,client_number: int, first_name: str, last_name: str, email_address: str):
         """
         Args:
@@ -26,7 +26,7 @@ class client:
             EmailNotValidError:
                 email_address is not valid.
         """
-        if client_number is int:
+        if isinstance(client_number, int):
             self.__client_number = client_number
         else:
             raise ValueError("Client number should be an int.")
@@ -45,10 +45,10 @@ class client:
         
 
         try:
-            self.__email_address = validate_email(email_address, check_deliverability= False)
+            validate_email(email_address, check_deliverability= False)
+            self.__email_address = email_address
         except EmailNotValidError as e:
             self.__email_address = "email@pixell-river.com"
-            print(f"Error:{e}")
 
     @property
     # Return the client number of this client.
