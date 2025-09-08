@@ -45,3 +45,43 @@ class TestCourse(unittest.TestCase):
 
         # Assert
         self.assertEqual("email@pixell-river.com",testclient._Client__email_address)
+
+
+    def test_init_str_output(self):
+        # Arrange
+        testclient = Client(123,"Richard","Huang","RH@rrc.ca")
+        expect = "Client Number:123\nFirst Name:Richard" \
+        "\nLast Name:Huang\nE-mail Address:RH@rrc.ca"
+        # Act and Assert
+        self.assertEqual(expect,str(testclient))
+
+    def test_init_client_number_accesser(self):
+        # Arrange
+        testclient = Client(123,"Richard","Huang","RH@rrc.ca")
+        get_client_number = testclient.client_number
+        # Act and Assert
+        self.assertEqual(123,get_client_number)
+
+    
+    def test_init_first_name_accesser(self):
+        # Arrange
+        testclient = Client(123,"Richard","Huang","RH@rrc.ca")
+        get_first_name = testclient.first_name
+        # Act and Assert
+        self.assertEqual("Richard",get_first_name)
+
+
+    def test_init_last_name_accesser(self):
+        # Arrange
+        testclient = Client(123,"Richard","Huang","RH@rrc.ca")
+        get_last_name = testclient.last_name
+        # Act and Assert
+        self.assertEqual("Richard",get_last_name)
+
+
+    def test_init_email_address_accesser(self):
+        # Arrange
+        testclient = Client(123,"Richard","Huang","RH@rrc.ca")
+        get_email_address = testclient.email_address
+        # Act and Assert
+        self.assertEqual("Richard",get_email_address)
