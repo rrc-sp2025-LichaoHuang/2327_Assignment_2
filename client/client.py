@@ -72,3 +72,21 @@ class client:
     # Return the email address of this client.
     def email_address(self) -> str:
         return self.__email_address
+    
+    
+    def __str__(self) -> str:
+        """
+        return:
+            All information of this client.
+            Client Number:
+            First Name:
+            Last Name:
+            E-mail Address:
+
+        """
+        return(f"Client Number:{self.__client_number}"
+               +f"\nFirst Name:{self.__first_name}"
+               +f"\nLast Name:{self.__last_name}"
+               +f"\nE-mail Address:{self.__email_address}")
+
+        
