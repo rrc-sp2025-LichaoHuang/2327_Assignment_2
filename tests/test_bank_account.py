@@ -107,3 +107,11 @@ class TestCourse(unittest.TestCase):
     def test_balance_accessor(self):
         account = Bank_account(123, 456, 789.0)
         self.assertAlmostEqual(789.0, account.balance, places=2)
+
+ 
+    # __str__ test
+    
+    def test_str_output_format(self):
+        account = Bank_account(12345, 67890, 1500.756)
+        expected_str = "Account Number: 12345 Balance: $1500.76"
+        self.assertEqual(str(account), expected_str)
