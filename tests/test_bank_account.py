@@ -93,6 +93,11 @@ class TestCourse(unittest.TestCase):
         with self.assertRaises(ValueError):
             account.update_balance("abc")
 
+    def test_update_balance_negative(self):
+        account = BankAccount(1, 1, 100)
+        account.update_balance(-1000.01)
+        self.assertAlmostEqual(-1000.01, account._BankAccount__balance)
+
     # accessors tests
 
 

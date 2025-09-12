@@ -58,7 +58,10 @@ class BankAccount:
 
     def update_balance(self, amount: float) -> None:
         # Update balance to a specific value.
-        self.__balance = float(amount)
+        if isinstance(amount,(int,float)):
+            self.__balance = float(amount)
+        else:
+            raise ValueError
 
 
     def deposit(self, amount: float) -> None:
