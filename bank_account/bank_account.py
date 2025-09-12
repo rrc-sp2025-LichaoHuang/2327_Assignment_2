@@ -3,7 +3,7 @@
 __author__ = "Lichao Huang"
 __version__ = "1.0.0"
 
-class Bank_account:
+class BankAccount:
     def __init__(self, account_number : int, client_number: int, balance: float):
         """
         Args:
@@ -65,7 +65,7 @@ class Bank_account:
         # Make deposit when amount is numeric and it is a positive number.
         if isinstance(amount, (float,int)):
             if amount <= 0:
-                raise ValueError(f"Deposit amount: ${abs(amount):.2f} must be positive.")
+                raise ValueError(f"Deposit amount: ${abs(amount):,.2f} must be positive.")
             else:
                 self.__balance += float(amount)
         else:
@@ -77,15 +77,15 @@ class Bank_account:
         # and the account has sufficient balance.
         if isinstance(amount, (float, int)):
             if amount <= 0:
-                raise ValueError(f"Withdraw amount: ${abs(amount):.2f} must be positive.")
+                raise ValueError(f"Withdraw amount: ${abs(amount):,.2f} must be positive.")
             if amount > self.__balance:
-                raise ValueError(f"Withdraw amount: ${abs(amount):.2f}"
-                                 f"must not exceed the account balance: ${abs(self.__balance):.2f}.")
+                raise ValueError(f"Withdraw amount: ${abs(amount):,.2f}"
+                                 f"must not exceed the account balance: ${abs(self.__balance):,.2f}.")
             self.__balance -= float(amount)
         else:
             raise TypeError(f"Withdraw amount: {amount} must be numeric.")
         
 
     def __str__(self) -> str:
-        return (f"Account Number: {self.__account_number} Balance: ${self.__balance:.2f}")
+        return (f"Account Number: {self.__account_number} Balance: ${self.__balance:,.2f}")
     
