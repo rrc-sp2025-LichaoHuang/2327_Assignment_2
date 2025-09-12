@@ -90,5 +90,9 @@ class BankAccount:
         
 
     def __str__(self) -> str:
+        """
+        return:
+                "Account Number:(account_number) Balance: $(balance)"
+        """
         return (f"Account Number: {self.__account_number} Balance: ${self.__balance:,.2f}")
     
