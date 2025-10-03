@@ -3,13 +3,22 @@
 __author__ = "Lichao Huang"
 __version__ = "1.0.0"
 
-class BankAccount:
-    def __init__(self, account_number : int, client_number: int, balance: float):
+from datetime import date
+from abc import ABC, abstractmethod
+
+class BankAccount(ABC):
+    """
+    
+    """
+    def __init__(self, account_number : int, client_number: int, balance: float,
+                 date_created: date):
         """
+        Initialize a Bank account instance.
         Args:
             account_number(int): Account number.
             client_number(int): Client number.
             balance(str): Account balance.
+            date_created (date): Account create date.
 
         Returns:
             None
@@ -38,6 +47,11 @@ class BankAccount:
             self.__balance = float(balance)
         except (ValueError, TypeError):
             self.__balance = 0.0
+
+        if isinstance(date_created, date):
+            self._date_created = date_created
+        else:
+            self._date_created = date.today()
 
 
     @property
@@ -96,3 +110,10 @@ class BankAccount:
         """
         return (f"Account Number: {self.__account_number} Balance: ${self.__balance:,.2f}")
     
+    @abstractmethod
+    def get_service_charges(self) -> float:
+        """
+        Undefined abstract method to get service charges.
+
+        """
+        pass
