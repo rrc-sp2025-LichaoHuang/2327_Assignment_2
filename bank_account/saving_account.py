@@ -20,13 +20,22 @@ class SavingAccount(BankAccount):
         
         super().__init__(account_number, client_number, balance, date_created)
 
-        # if isinstance(minimum_balance, float):
-        #     self.__minimum_balance = minimum_balance
-        # else:
-        #     self.__minimum_balance = 50
-
         try:
             self.__minimum_balance = float(minimum_balance)
         except (ValueError, TypeError):
             self.__minimum_balance = 50
 
+    def __str__(self) -> str:
+        return(
+            super().__str__()
+            + f"Minimum Balance: ${self.__minimum_balance:,.2f} "
+            + "Account Type: Savings"
+
+        )
+    
+    def get_service_charges(self) -> float:
+        if self.balance < self.__minimum_balance:
+            service_fee = self.BASE_SERVICE_CHARGE
+        else:
+            service_fee = self.BASE_SERVICE_CHARGE * self.SERVICE_CHARGE_PREMIUM
+        return service_fee
