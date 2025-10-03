@@ -8,6 +8,11 @@ from abc import ABC, abstractmethod
 
 class BankAccount(ABC):
     """
+    Abstract base class for a bank account.
+
+    Stores account number, client number, balance, and creation date.
+    Provides deposit, withdraw, and balance update methods.
+    Subclasses must implement get_service_charges().
     
     """
 
@@ -16,23 +21,18 @@ class BankAccount(ABC):
     def __init__(self, account_number : int, client_number: int, balance: float,
                  date_created: date):
         """
-        Initialize a Bank account instance.
-        Args:
-            account_number(int): Account number.
-            client_number(int): Client number.
-            balance(str): Account balance.
-            date_created (date): Account create date.
+        Initialize a BankAccount instance with account number, client number, balance, 
+        and creation date.
 
-        Returns:
-            None
-            
+        Args:
+            account_number (int): The unique account number.
+            client_number (int): The client identifier associated with the account.
+            balance (float): Initial account balance.
+            date_created (date): The date when the account was created.
+
         Raises:
-            ValueError: 
-                Account_number is not int.
-                Client_number is not int.
-                Balance is not numeric.
-            TypeError:
-                Balance is not float or int.
+            ValueError: If account_number or client_number is not an int.
+            TypeError: If balance cannot be converted to a float.
         """
         if isinstance(account_number, int):
             self.__account_number = account_number
@@ -59,22 +59,42 @@ class BankAccount(ABC):
 
     @property
     def account_number(self):
-        # Return account number.
+        """
+        Get the account number.
+
+        Returns:
+            int: The unique account number.
+        """
         return self.__account_number
 
     @property
     def client_number(self):
-        # Return client number.
+        """
+        Get the client number.
+
+        Returns:
+            int: The client identifier linked to this account.
+        """
         return self.__client_number
 
     @property
     def balance(self):
-        # Return account balance.
+        """
+        Get the current account balance.
+
+        Returns:
+            float: The balance of the account.
+        """
         return self.__balance
     
 
     def update_balance(self, amount: float) -> None:
-        # Update balance to a specific value.
+        """
+        Update the account balance by adding the given numeric amount.
+
+        Args:
+            amount (float): The amount to add (can be positive or negative).
+        """
         if isinstance(amount,(int,float)):
             self.__balance += float(amount)
         else:
@@ -82,7 +102,16 @@ class BankAccount(ABC):
 
 
     def deposit(self, amount: float) -> None:
-        # Make deposit when amount is numeric and it is a positive number.
+        """
+        Deposit a positive numeric amount into the account.
+
+        Args:
+            amount (float): The amount to deposit.
+
+        Raises:
+            TypeError: If amount is not numeric.
+            ValueError: If amount is not positive.
+        """
         if isinstance(amount, (float,int)):
             if amount <= 0:
                 raise ValueError(f"Deposit amount: ${(amount):,.2f} must be positive.")
@@ -93,8 +122,16 @@ class BankAccount(ABC):
         
 
     def withdraw(self, amount: float) -> None:
-        # Make a withdraw when amount is numeric and it is a positive number 
-        # and the account has sufficient balance.
+        """
+        Withdraw a positive numeric amount from the account if sufficient funds exist.
+
+        Args:
+            amount (float): The amount to withdraw.
+
+        Raises:
+            TypeError: If amount is not numeric.
+            ValueError: If amount is non-positive or exceeds the balance.
+        """
         if isinstance(amount, (float, int)):
             if amount <= 0:
                 raise ValueError(f"Withdraw amount: ${(amount):,.2f} must be positive.")
