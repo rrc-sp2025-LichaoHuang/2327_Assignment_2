@@ -25,5 +25,29 @@ class TestInvestmentAccount(unittest.TestCase):
         
         service_fee = account.get_service_charges()
 
+        self.assertEqual(0.50, service_fee)
+
+    def test_get_service_charges_balance_equal_than_the_minimum_get_get_only_BASE_SERVICE_CHARGE(self):
+        account = SavingAccount(123,321, 50, date(1000,10,10), 50)
+        
+        service_fee = account.get_service_charges()
+
+        self.assertEqual(0.50, service_fee)
+
+    def test_get_service_charges_balance_less_than_the_minimum_get_get_only_BASE_SERVICE_CHARGE(self):
+        account = SavingAccount(123,321, 40, date(1000,10,10), 50)
+        
+        service_fee = account.get_service_charges()
+
         self.assertEqual(1.0, service_fee)
+
+    def test_str_valid_input_returns_expected_string(self):
+        account = SavingAccount(123,321,-50, date(2020,10,10), 50)
+
+        str_return = account.__str__()
+
+        expect = ("Account Number: 123 Balance: $-50.00 "
+                "Date Created: 2020-10-10 \nMinimum Balance: $50.00 Account Type: Savings")
+        
+        self.assertEqual(str_return, expect)
 
