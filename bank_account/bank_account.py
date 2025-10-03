@@ -111,7 +111,8 @@ class BankAccount(ABC):
         return:
                 "Account Number:(account_number) Balance: $(balance)"
         """
-        return (f"Account Number: {self.__account_number} Balance: ${self.__balance:,.2f} ")
+        return (f"Account Number: {self.__account_number} Balance: ${self.__balance:,.2f} \
+                Date Created: {self._date_created}")
     
     @abstractmethod
     def get_service_charges(self) -> float:

@@ -3,7 +3,6 @@ __author__ = "Lichao Huang"
 __version__ = "1.0.0"
 
 from datetime import date
-from abc import ABC, abstractmethod
 from bank_account.bank_account import BankAccount
 
 class ChequingAccount(BankAccount):
@@ -45,6 +44,7 @@ class ChequingAccount(BankAccount):
     
     @property
     def get_service_charges(self) -> float:
+        #
         if self.__balance < self.__overdraft_limit:
             service_fee = self.BASE_SERVICE_CHARGE + \
             (self.__overdraft_limit - self.__balance) * self.__overdraft_rate
