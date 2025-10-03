@@ -23,7 +23,7 @@ class InvestmentAccount(BankAccount):
         Args:
             account_number (int): Unique account number.
             client_number (int): Client identifier.
-            balance (float): Initial account balance.
+            balance (float): Balance.
             date_created (date): Account creation date.
             management_fee (float): Additional management fee for the account.
         """

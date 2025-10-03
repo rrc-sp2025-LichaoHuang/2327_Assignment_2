@@ -13,7 +13,7 @@ class BankAccount(ABC):
     Stores account number, client number, balance, and creation date.
     Provides deposit, withdraw, and balance update methods.
     Subclasses must implement get_service_charges().
-    
+
     """
 
     BASE_SERVICE_CHARGE: float = 0.50
@@ -25,10 +25,10 @@ class BankAccount(ABC):
         and creation date.
 
         Args:
-            account_number (int): The unique account number.
-            client_number (int): The client identifier associated with the account.
-            balance (float): Initial account balance.
-            date_created (date): The date when the account was created.
+            account_number (int): Unique account number.
+            client_number (int): Client identifier.
+            balance (float): Initial balance.
+            date_created (date): Account creation date.
 
         Raises:
             ValueError: If account_number or client_number is not an int.

@@ -21,7 +21,7 @@ class ChequingAccount(BankAccount):
         Args:
             account_number (int): Unique account number.
             client_number (int): Client identifier.
-            balance (float): Initial balance.
+            balance (float): Balance.
             date_created (date): Account creation date.
             overdraft_limit (float): Allowed overdraft limit (negative value).
             overdraft_rate (float): Rate applied on overdraft used.
