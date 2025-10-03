@@ -26,9 +26,10 @@ class InvestmentAccount(BankAccount):
         
     
     def __str__(self) -> str:
-        account_duration = (self._date_created - self.TEN_YEARS_AGO)
-        duration_year = account_duration.days / 365.25
-        if duration_year >= 10:
+        # account_duration = (self._date_created - self.TEN_YEARS_AGO)
+        # duration_year = account_duration.days / 365.25
+        # if duration_year >= 10:
+        if self._date_created < self.TEN_YEARS_AGO:
             return(
                 super().__str__()
                 + "Management fee: Waived Account "
@@ -41,11 +42,12 @@ class InvestmentAccount(BankAccount):
                 + "Account Type: Investment"
             )
 
-    @property
+
     def get_service_charges(self) -> float:
-        account_duration = (self._date_created - self.TEN_YEARS_AGO)
-        duration_year = account_duration.days / 365.25
-        if duration_year >= 10:
+       # account_duration = (self._date_created - self.TEN_YEARS_AGO)
+       # duration_year = account_duration.days / 365.25
+        # if duration_year >= 10:
+        if self._date_created < self.TEN_YEARS_AGO:
             service_fee = self.BASE_SERVICE_CHARGE
         else:
             service_fee = self.BASE_SERVICE_CHARGE + self.__management_fee

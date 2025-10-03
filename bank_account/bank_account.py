@@ -76,18 +76,18 @@ class BankAccount(ABC):
     def update_balance(self, amount: float) -> None:
         # Update balance to a specific value.
         if isinstance(amount,(int,float)):
-            self.__balance = float(amount)
+            self.__balance += float(amount)
         else:
-            raise ValueError
+            pass
 
 
     def deposit(self, amount: float) -> None:
         # Make deposit when amount is numeric and it is a positive number.
         if isinstance(amount, (float,int)):
             if amount <= 0:
-                raise ValueError(f"Deposit amount: ${abs(amount):,.2f} must be positive.")
+                raise ValueError(f"Deposit amount: ${(amount):,.2f} must be positive.")
             else:
-                self.__balance += float(amount)
+                self.update_balance(amount)
         else:
             raise TypeError(f"Deposit amount: {amount} must be numeric.")
         
@@ -97,11 +97,12 @@ class BankAccount(ABC):
         # and the account has sufficient balance.
         if isinstance(amount, (float, int)):
             if amount <= 0:
-                raise ValueError(f"Withdraw amount: ${abs(amount):,.2f} must be positive.")
+                raise ValueError(f"Withdraw amount: ${(amount):,.2f} must be positive.")
             if amount > self.__balance:
-                raise ValueError(f"Withdraw amount: ${abs(amount):,.2f}"
-                                 f"must not exceed the account balance: ${abs(self.__balance):,.2f}.")
-            self.__balance -= float(amount)
+                raise ValueError(f"Withdraw amount: ${(amount):,.2f}"
+                                 f"must not exceed the account balance: \
+                                    ${(self.__balance):,.2f}.")
+            self.update_balance(-amount)
         else:
             raise TypeError(f"Withdraw amount: {amount} must be numeric.")
         

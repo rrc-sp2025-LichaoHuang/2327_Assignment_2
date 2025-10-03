@@ -16,3 +16,8 @@ class TestChequingAccount(unittest.TestCase):
         self.assertEqual(date(2000,10,10), account._date_created)
         self.assertEqual(-10, account._ChequingAccount__overdraft_limit)
         self.assertEqual(0.1, account._ChequingAccount__overdraft_rate)
+
+    def test_get_service_charges_large_balance_less_fee(self):
+        account = ChequingAccount(123,321,500, date(2000,10,10), -10.0, 0.1)
+        service_charges = account.get_service_charges()
+        self.assertEqual(0.50, service_charges)
