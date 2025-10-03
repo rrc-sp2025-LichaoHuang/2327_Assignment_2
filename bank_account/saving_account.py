@@ -26,6 +26,9 @@ class SavingAccount(BankAccount):
             self.__minimum_balance = 50
 
     def __str__(self) -> str:
+        """
+        
+        """
         return(
             super().__str__()
             + f"Minimum Balance: ${self.__minimum_balance:,.2f} "
@@ -34,7 +37,10 @@ class SavingAccount(BankAccount):
         )
     
     def get_service_charges(self) -> float:
-        if self.balance < self.__minimum_balance:
+        """
+        
+        """
+        if self.balance > self.__minimum_balance:
             service_fee = self.BASE_SERVICE_CHARGE
         else:
             service_fee = self.BASE_SERVICE_CHARGE * self.SERVICE_CHARGE_PREMIUM
