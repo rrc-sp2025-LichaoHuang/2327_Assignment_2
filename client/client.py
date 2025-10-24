@@ -1,13 +1,16 @@
 
 
 from email_validator import validate_email, EmailNotValidError
+from datetime import datetime
+from patterns.observer.observer import Observer
+from utility.file_utils import simulate_send_email
 
 
 __author__ = "Lichao Huang"
 __version__ = "1.0.0"
 
 
-class Client:
+class Client(Observer):
     def __init__(self,client_number: int, first_name: str, last_name: str, email_address: str):
         """
         Args:
@@ -90,4 +93,19 @@ class Client:
                +f"\nLast Name:{self.__last_name}"
                +f"\nE-mail Address:{self.__email_address}")
 
-        
+    def update(self, message: str) -> None:
+        """
+        Responds to notifications from the Subject (e.g., BankAccount).
+
+        Args:
+            message (str): The message received from the Subject.
+        """
+
+        email_subject = f"ALERT: Unusual Activity: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+        email_message = (f"Notification for {self.__client_number}: "
+                        f"{self.__first_name} {self.__last_name}: {message}")
+
+
+        simulate_send_email(self.__email_address, email_subject, email_message)
