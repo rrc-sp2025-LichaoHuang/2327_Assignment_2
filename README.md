@@ -17,3 +17,12 @@ In this assignment, I used self.__ to encapsulate two classes, ensuring that the
 Assignment 2: This assignment builds on the basic BankAccount class by adding Chequing, Investment, and Saving accounts. Each subclass implements its own service charge rules using inheritance and polymorphism. Encapsulation is kept with private attributes, and clear docstrings are added for readability and maintainability.
 
 Since assignment 2 is saved in another repository, there is no step of creating a branch at the beginning of the job and merging the branches at the end.
+
+
+## Strategy Pattern
+
+In this project, I learned how to use the Strategy Pattern in a simple and practical way. The main idea is to separate the logic for calculating service fees from the main account classes. Instead of writing all the fee rules inside each class, I created different strategy classes like OverdraftStrategy, ManagementFeeStrategy, and MinimumBalanceStrategy. Each account type — Chequing, Investment, or Saving — uses one of these strategies to calculate its service charges.
+
+When the program runs get_service_charges(), the account doesn’t do the math by itself. It simply asks its strategy object to handle it.
+
+While testing, I ran into an error with the SavingAccount class. I accidentally passed a string like "aa" as the minimum balance, and the test crashed because it couldn’t convert it to a number. I realized I forgot to add a default value when the input was invalid. After fixing it by setting a default of 50, everything worked fine and all tests passed.
