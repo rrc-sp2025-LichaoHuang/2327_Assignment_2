@@ -26,3 +26,18 @@ In this project, I learned how to use the Strategy Pattern in a simple and pract
 When the program runs get_service_charges(), the account doesn’t do the math by itself. It simply asks its strategy object to handle it.
 
 While testing, I ran into an error with the SavingAccount class. I accidentally passed a string like "aa" as the minimum balance, and the test crashed because it couldn’t convert it to a number. I realized I forgot to add a default value when the input was invalid. After fixing it by setting a default of 50, everything worked fine and all tests passed.
+
+
+## Observer Pattern
+
+During Part 2 of the assignment, I worked on implementing the Observer Pattern. At first, I was quite confused about how the different components interacted, especially the relationship between the Observer (Client) and the Subject (BankAccount). I initially tried to directly connect the Client and the BankAccount classes, not realizing that their communication should happen through the Subject-Observer mechanism rather than by directly referencing each other.
+
+Another major source of confusion was the simulate_send_email function. I didn’t immediately understand that it doesn’t actually send real emails—it just simulates the process by writing the notification messages into a text file (observer_emails.txt) inside the output directory. Because of that, I spent quite a while trying to figure out why “no notification” seemed to appear, when in fact, the results were quietly being written into a file.
+
+After understanding this, everything made sense:
+
+BankAccount (as a Subject) tracks its observers and notifies them when certain conditions occur (like a large transaction or low balance).
+
+Client (as an Observer) receives those notifications through its update() method, which uses simulate_send_email to log the messages.
+
+This part taught me how the Observer Pattern helps separate responsibility between data changes and how those changes are communicated.
