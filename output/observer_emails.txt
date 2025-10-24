@@ -1,0 +1,30 @@
+---
+To: li@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 1: Lichao Huang: Large transaction $15,000.00: on account 1.
+---
+---
+To: li@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 1: Lichao Huang: Large transaction $-15,450.00: on account 1.
+---
+---
+To: li@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 1: Lichao Huang: Low balance warning $25.00: on account 2.
+---
+---
+To: li@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 1: Lichao Huang: Large transaction $12,000.00: on account 2.
+---
+---
+To: alex@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 2: Alex Johnson: Low balance warning $20.00: on account 3.
+---
+---
+To: alex@example.com
+Subject: ALERT: Unusual Activity: 2025-10-24 17:02:43
+Message: Notification for 2: Alex Johnson: Large transaction $20,000.00: on account 3.
+---
