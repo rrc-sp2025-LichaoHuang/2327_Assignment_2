@@ -41,3 +41,14 @@ BankAccount (as a Subject) tracks its observers and notifies them when certain c
 Client (as an Observer) receives those notifications through its update() method, which uses simulate_send_email to log the messages.
 
 This part taught me how the Observer Pattern helps separate responsibility between data changes and how those changes are communicated.
+
+## Assignment 4
+
+
+Assignment 4: This assignment focuses on building a simple banking application using PySide6 and the event-driven programming model. The program reads client and account information from CSV files, displays the results in a lookup window, and allows the user to select an account and perform deposit or withdrawal actions in a separate dialog window. The GUI uses inheritance from provided superclasses, which helped reinforce object-oriented design principles.
+
+One of the biggest challenges for me was understanding how the GUI functions and event flow actually work. I spent a long time experimenting with signals, slots, and widget events to figure out how different windows communicate. A lot of progress was made only after repeated trial-and-error testing.
+
+Another challenge was reading and processing CSV files correctly. I realized I wasn’t very familiar with converting CSV strings into the correct data types, so I had to revisit my previous assignments to remember how to parse data properly and handle invalid records.
+
+Once everything connected—data loading, event handling, and the custom signal used to refresh the balance—the application finally behaved as expected. Overall, this assignment gave me a much clearer understanding of event-driven programming and how GUI applications manage user interactions and data updates.
