@@ -10,6 +10,14 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import csv
 from datetime import datetime
 import logging
+# *******************************************************************************
+# NEW IMPORT
+from client.client import Client
+from bank_account.chequing_account import ChequingAccount
+from bank_account.saving_account import SavingAccount
+from bank_account.investment_account import InvestmentAccount
+from datetime import date
+from bank_account.bank_account import BankAccount
 
 # *******************************************************************************
 # GIVEN LOGGING AND FILE ACCESS CODE
@@ -48,28 +56,111 @@ accounts_csv_path = os.path.join(data_dir, 'accounts.csv')
 
 
 
-def load_data()->tuple[dict,dict]:
+def load_data() -> tuple[dict, dict]:
     """
-    Populates a client dictionary and an account dictionary with 
-    corresponding data from files within the data directory.
+    Load client and bank account data from the CSV files in the data directory.
+
     Returns:
-        tuple containing client dictionary and account dictionary.
+        tuple(dict, dict):
+            - client_listing: {client_number: Client}
+            - accounts: {account_number: BankAccount}
     """
+
+    # Two dictionaries required by assignment spec
     client_listing = {}
     accounts = {}
 
-    # READ CLIENT DATA 
-    with open(clients_csv_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        
+    # READ CLIENT DATA
+    try:
+        with open(clients_csv_path, newline='') as file:
+            reader = csv.DictReader(file)
+
+            for row in reader:
+                try:
+                    # Convert CSV values into proper data types for Client constructor
+                    client_number = int(row["client_number"])
+                    first = row["first_name"]
+                    last = row["last_name"]
+                    email = row["email_address"]
+
+                    # Create Client object
+                    client_obj = Client(client_number, first, last, email)
+
+                    # Store in dictionary using client_number as the key
+                    client_listing[client_number] = client_obj
+
+                except Exception as e:
+                    # Any client creation error is logged but processing continues
+                    logging.error(f"Unable to create client: {e}")
+
+    except Exception as e:
+        logging.error(f"Error reading clients.csv: {e}")
 
     # READ ACCOUNT DATA
-    with open(accounts_csv_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)  
+    try:
+        with open(accounts_csv_path, newline='') as file:
+            reader = csv.DictReader(file)
 
-    # RETURN STATEMENT
-    
+            for row in reader:
+                try:
+                    # Convert CSV fields into strongly-typed values
+                    acc_num = int(row["account_number"])
+                    client_num = int(row["client_number"])
+                    balance = float(row["balance"])
+                    date_created = date.fromisoformat(row["date_created"])
+                    acc_type = row["account_type"]
 
+                    # Helper to convert "Null" to actual str None
+                    def to_float(value):
+                        return float(value) if value != "Null" else None
+
+                    overdraft_limit = to_float(row["overdraft_limit"])
+                    overdraft_rate = to_float(row["overdraft_rate"])
+                    minimum_balance = to_float(row["minimum_balance"])
+                    management_fee = to_float(row["management_fee"])
+
+                    # Instantiate the correct BankAccount subclass
+                    if acc_type == "ChequingAccount":
+                        account_obj = ChequingAccount(
+                            acc_num, client_num, balance,
+                            date_created, overdraft_limit, overdraft_rate
+                        )
+
+                    elif acc_type == "InvestmentAccount":
+                        account_obj = InvestmentAccount(
+                            acc_num, client_num, balance,
+                            date_created, management_fee
+                        )
+
+                    elif acc_type in ("SavingsAccount", "SavingAccount"):
+                        account_obj = SavingAccount(
+                            acc_num, client_num, balance,
+                            date_created, minimum_balance
+                        )
+
+                    else:
+                        # Invalid account type → raise error so it gets logged
+                        raise ValueError("Not a valid account type.")
+
+                    # Ensure account references an existing client
+                    if client_num not in client_listing:
+                        logging.error(
+                            f"Bank Account {acc_num} contains invalid Client Number {client_num}")
+                        # skip adding the account
+                        continue  
+
+                    # Store the account using account_number as key
+                    accounts[acc_num] = account_obj
+
+                except Exception as e:
+                    # Log any error related to individual account creation
+                    logging.error(f"Unable to create bank account: {e}")
+
+    except Exception as e:
+        logging.error(f"Error reading accounts.csv: {e}")
+
+    # RETURN BOTH DICTIONARIES
+    return client_listing, accounts
 
 def update_data(updated_account: BankAccount) -> None:
     """
