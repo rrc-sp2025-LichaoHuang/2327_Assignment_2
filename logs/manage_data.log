@@ -268,3 +268,15 @@ root - ERROR - Unable to create bank account: Not a valid account type.
 root - ERROR - Bank Account 20100 contains invalid Client Number 9999
 
 
+root - ERROR - Unable to create client: First name cannot be blank.
+
+
+root - ERROR - Unable to create bank account: could not convert string to float: 'ten'
+
+
+root - ERROR - Unable to create bank account: Not a valid account type.
+
+
+root - ERROR - Bank Account 20100 contains invalid Client Number 9999
+
+

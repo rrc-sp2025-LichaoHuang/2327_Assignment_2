@@ -23,6 +23,12 @@ class AccountDetailsWindow(DetailsWindow):
         """
         super().__init__()
 
+        # make sure data type is BankAccount
+        if not isinstance(account, BankAccount):
+            # If something else is passed in, just close the dialog
+            self.reject()
+            return
+        
         # Original reference (actual account stored in dictionary)
         self.account = account
 
