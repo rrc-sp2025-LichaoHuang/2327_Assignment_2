@@ -41,3 +41,8 @@ BankAccount (as a Subject) tracks its observers and notifies them when certain c
 Client (as an Observer) receives those notifications through its update() method, which uses simulate_send_email to log the messages.
 
 This part taught me how the Observer Pattern helps separate responsibility between data changes and how those changes are communicated.
+
+## Assignment 4
+
+
+Assignment 4: [Indicate the name and description of the current assignment]
