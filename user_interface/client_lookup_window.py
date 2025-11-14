@@ -93,7 +93,7 @@ class ClientLookupWindow(LookupWindow):
                 item_acc.setTextAlignment(Qt.AlignCenter)
                 self.account_table.setItem(row, 0, item_acc)
 
-                # Balance (formatted as money)
+                # Balance
                 item_bal = QTableWidgetItem(f"${account.balance:,.2f}")
                 item_bal.setTextAlignment(Qt.AlignCenter)
                 self.account_table.setItem(row, 1, item_bal)
@@ -103,7 +103,7 @@ class ClientLookupWindow(LookupWindow):
                 item_date.setTextAlignment(Qt.AlignCenter)
                 self.account_table.setItem(row, 2, item_date)
 
-                # Account Type (class name)
+                # Account Type
                 item_type = QTableWidgetItem(account.__class__.__name__)
                 item_type.setTextAlignment(Qt.AlignCenter)
                 self.account_table.setItem(row, 3, item_type)
@@ -138,7 +138,7 @@ class ClientLookupWindow(LookupWindow):
         - Open the Account Details window
         """
 
-        # Get the item from the first column (account number)
+        # Get the account number from the first column
         item = self.account_table.item(row, 0)
 
         # If nothing is selected or row is weird, show a warning
@@ -163,7 +163,22 @@ class ClientLookupWindow(LookupWindow):
             QMessageBox.information(self, "No Bank Account", "Bank Account selected does not exist.")
             return
 
+
+        
+
         # Everything is valid → open the Account Details dialog
         account = self.accounts[account_number]
         window = AccountDetailsWindow(account)
+        window.balance_updated.connect(self.update_data)
         window.exec()
+
+    def update_data(self, updated_account: BankAccount):
+        """
+        This method is called when the AccountDetailsWindow emits balance_updated.
+        It writes the updated account info back into the CSV file and refreshes the table.
+        """
+        # Write the updated account to CSV
+        update_data(updated_account)
+
+        # Refresh table output so balance updates instantly
+        self.on_lookup_client()
