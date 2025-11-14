@@ -14,7 +14,7 @@ class AccountDetailsWindow(DetailsWindow):
     deposit/withdraw actions.
     """
 
-    # Signal emitted to parent window (ClientLookupWindow)
+    # Signal to ClientLookupWindow
     balance_updated = Signal(BankAccount)
 
     def __init__(self, account: BankAccount):

@@ -30,6 +30,7 @@ class ClientLookupWindow(LookupWindow):
         self.client_number_edit.textChanged.connect(self.on_text_changed)
         self.account_table.cellClicked.connect(self.on_select_account)
 
+
     # ------------------------------------------------------------------
     def on_lookup_client(self):
         """
@@ -113,6 +114,7 @@ class ClientLookupWindow(LookupWindow):
         # Auto-adjust column sizes so text is not cut off
         self.account_table.resizeColumnsToContents()
 
+
     # ------------------------------------------------------------------
     def on_text_changed(self):
         """
@@ -125,6 +127,7 @@ class ClientLookupWindow(LookupWindow):
         """
         self.account_table.setRowCount(0)
         self.client_info_label.setText("")
+
 
     # ------------------------------------------------------------------
     def on_select_account(self, row: int, column: int):
