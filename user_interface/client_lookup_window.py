@@ -13,82 +13,157 @@ from bank_account.bank_account import BankAccount
 
 class ClientLookupWindow(LookupWindow):
     """
-    A window that displays a searchable table of all clients.
-
-    This class extends LookupWindow and provides:
-    - Loading client & account data from CSV files (using load_data)
-    - Displaying each client in a table
-      (client number, first name, last name, email)
-    - Allowing the user to search using the lookup bar inherited
-      from LookupWindow
-    - Opening AccountDetailsWindow when a client row is double-clicked
-
-    The window does not modify client or account data directly;
-    updates are handled in AccountDetailsWindow and written to file
-    through update_data().
+    Main window that lets the user search for a client by client number.
+    Once a client is found, their bank accounts will show in the table.
+    The user can then click an account to open the Account Details window.
     """
 
     def __init__(self):
-        """Initialize the lookup window and load all client data."""
+        """Set up the UI, load the CSV data, and connect all the signals."""
         super().__init__()
-        self.clients, self.accounts = load_data()
-        self.populate_table()
 
-    # ------------------------------------------------------------
-    def populate_table(self):
+        # Load client and account dictionaries from CSV files
+        self.client_listing, self.accounts = load_data()
+
+        # Hook up buttons and widgets to their event-handling methods
+        self.lookup_button.clicked.connect(self.on_lookup_client)
+        self.client_number_edit.textChanged.connect(self.on_text_changed)
+        self.account_table.cellClicked.connect(self.on_select_account)
+
+    # ------------------------------------------------------------------
+    def on_lookup_client(self):
         """
-        Populate the table with all loaded client records.
+        Runs when the user clicks the 'Lookup Client' button.
 
-        Each row displays: client number, first name, last name, email.
-        The table only displays data; it does not modify it.
+        This method:
+        - Reads the typed client number
+        - Validates it
+        - Looks up the client in the dictionary
+        - Shows the client's name
+        - Lists all matching accounts in the table
         """
-        self.account_table.setRowCount(len(self.clients))
 
-        for row_index, client in enumerate(self.clients.values()):
+        # Clear old table data every time we do a fresh lookup
+        self.account_table.setRowCount(0)
+        self.client_info_label.setText("")
 
-            # Client Number
-            self.account_table.setItem(
-                row_index, 0, QTableWidgetItem(str(client.client_number))
+        text = self.client_number_edit.text().strip()
+
+        # Try converting text input → integer
+        # If this fails, the user typed something that isn't a number
+        try:
+            client_number = int(text)
+        except ValueError:
+            QMessageBox.information(
+                self,
+                "Input Error",
+                "The client number must be a numeric value."
             )
+            self.reset_display()
+            return
 
-            # First Name
-            self.account_table.setItem(
-                row_index, 1, QTableWidgetItem(client.first_name)
+        # Check if the client actually exists in our dictionary
+        if client_number not in self.client_listing:
+            QMessageBox.information(
+                self,
+                "Not Found",
+                f"Client number: {client_number} not found."
             )
+            self.reset_display()
+            return
 
-            # Last Name
-            self.account_table.setItem(
-                row_index, 2, QTableWidgetItem(client.last_name)
-            )
+        # At this point, we have a valid client
+        client = self.client_listing[client_number]
 
-            # Email
-            self.account_table.setItem(
-                row_index, 3, QTableWidgetItem(client.email_address)
-            )
+        # Show the client's full name in the label
+        self.client_info_label.setText(
+            f"Client Name: {client.first_name}  {client.last_name}"
+        )
 
+        # Now display all accounts that belong to this client
+        row = 0
+        for account in self.accounts.values():
+            if account.client_number == client_number:
+
+                # Add a new row to the table
+                self.account_table.insertRow(row)
+
+                # Account Number
+                item_acc = QTableWidgetItem(str(account.account_number))
+                item_acc.setTextAlignment(Qt.AlignCenter)
+                self.account_table.setItem(row, 0, item_acc)
+
+                # Balance (formatted as money)
+                item_bal = QTableWidgetItem(f"${account.balance:,.2f}")
+                item_bal.setTextAlignment(Qt.AlignCenter)
+                self.account_table.setItem(row, 1, item_bal)
+
+                # Date Created
+                item_date = QTableWidgetItem(str(account._date_created))
+                item_date.setTextAlignment(Qt.AlignCenter)
+                self.account_table.setItem(row, 2, item_date)
+
+                # Account Type (class name)
+                item_type = QTableWidgetItem(account.__class__.__name__)
+                item_type.setTextAlignment(Qt.AlignCenter)
+                self.account_table.setItem(row, 3, item_type)
+
+                row += 1
+
+        # Auto-adjust column sizes so text is not cut off
         self.account_table.resizeColumnsToContents()
 
-    # ------------------------------------------------------------
-    def handle_row_selected(self, row: int):
+    # ------------------------------------------------------------------
+    def on_text_changed(self):
         """
-        Triggered when the user double-clicks a row.
+        Runs every time the user types something in the client number box.
 
-        Retrieves the client_number from the row and opens
-        AccountDetailsWindow for the selected client.
+        Purpose:
+        - Clear old table data
+        - Clear the client name label
+        So the user always gets a clean slate.
         """
+        self.account_table.setRowCount(0)
+        self.client_info_label.setText("")
+
+    # ------------------------------------------------------------------
+    def on_select_account(self, row: int, column: int):
+        """
+        Runs when the user clicks on any cell in the account table.
+
+        Steps:
+        - Read the account number from the row
+        - Validate it
+        - Find the BankAccount object
+        - Open the Account Details window
+        """
+
+        # Get the item from the first column (account number)
         item = self.account_table.item(row, 0)
 
+        # If nothing is selected or row is weird, show a warning
         if item is None:
-            QMessageBox.warning(self, "Selection Error", "No client selected.")
+            QMessageBox.information(self, "Invalid Selection", "Please select a valid record.")
             return
 
-        client_number = int(item.text())
-        client = self.clients.get(client_number)
-
-        if not client:
-            QMessageBox.warning(self, "Error", "Client not found.")
+        text = item.text().strip()
+        if not text:
+            QMessageBox.information(self, "Invalid Selection", "Please select a valid record.")
             return
 
-        # Open the account details window
-        window = AccountDetailsWindow(client, self.accounts, update_data)
+        # Convert account number to int
+        try:
+            account_number = int(text)
+        except ValueError:
+            QMessageBox.information(self, "Invalid Selection", "Please select a valid record.")
+            return
+
+        # Check if this account exists
+        if account_number not in self.accounts:
+            QMessageBox.information(self, "No Bank Account", "Bank Account selected does not exist.")
+            return
+
+        # Everything is valid → open the Account Details dialog
+        account = self.accounts[account_number]
+        window = AccountDetailsWindow(account)
         window.exec()
