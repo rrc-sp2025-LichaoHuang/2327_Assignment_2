@@ -169,10 +169,10 @@ class ClientLookupWindow(LookupWindow):
         # Everything is valid → open the Account Details dialog
         account = self.accounts[account_number]
         window = AccountDetailsWindow(account)
-        window.balance_updated.connect(self.update_data)
+        window.balance_updated.connect(self.save_account_changes)
         window.exec()
 
-    def update_data(self, updated_account: BankAccount):
+    def save_account_changes(self, updated_account: BankAccount):
         """
         This method is called when the AccountDetailsWindow emits balance_updated.
         It writes the updated account info back into the CSV file and refreshes the table.
