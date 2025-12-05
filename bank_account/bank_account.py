@@ -110,14 +110,22 @@ class BankAccount(Subject, ABC):
             self._observers.remove(observer)
 
     def notify(self, message: str) -> None:
-        """Notify all attached observers with the given message."""
+        """
+        Notify all attached observers with the given message.
+        
+        Args: message(str): message to notify.
+        """
         for observer in self._observers:
             observer.update(message)
 
 #######################————NEW————###########################
 
     def deposit(self, amount: float) -> None:
-        """Deposit a positive numeric amount into the account."""
+        """
+        Deposit a positive numeric amount into the account.
+        
+        Args: amount(float): amount to deposit.
+        """
         if isinstance(amount, (float, int)):
             if amount <= 0:
                 raise ValueError(f"Deposit amount: ${(amount):,.2f} must be positive.")
@@ -127,7 +135,11 @@ class BankAccount(Subject, ABC):
             raise TypeError(f"Deposit amount: {amount} must be numeric.")
 
     def withdraw(self, amount: float) -> None:
-        """Withdraw a positive numeric amount from the account if sufficient funds exist."""
+        """
+        Withdraw a positive numeric amount from the account if sufficient funds exist.
+        
+        Args: amount(float): amount to withdraw.
+        """
         if isinstance(amount, (float, int)):
             if amount <= 0:
                 raise ValueError(f"Withdraw amount: ${(amount):,.2f} must be positive.")

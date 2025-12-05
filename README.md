@@ -52,3 +52,11 @@ One of the biggest challenges for me was understanding how the GUI functions and
 Another challenge was reading and processing CSV files correctly. I realized I wasn’t very familiar with converting CSV strings into the correct data types, so I had to revisit my previous assignments to remember how to parse data properly and handle invalid records.
 
 Once everything connected—data loading, event handling, and the custom signal used to refresh the balance—the application finally behaved as expected. Overall, this assignment gave me a much clearer understanding of event-driven programming and how GUI applications manage user interactions and data updates.
+
+
+
+## Assignment 5
+
+## Filtering
+
+In this assignment, I activated the filtering feature in the Client Lookup window. The program already had a combo box, a text input, and a filter button, but they were initially disabled. I connected the button’s clicked signal to the __on_filter_clicked method, which implements the filtering logic. When the user selects a column from the combo box and types a keyword, __on_filter_clicked loops through all rows in the account table and compares the cell in the selected column with the keyword. Any rows that don’t match are hidden using setRowHidden(), and matching rows remain visible. Clicking the button again when it shows “Reset” calls __toggle_filter(False), which restores all rows and re-enables the widgets. The __toggle_filter method also updates the button text and a label so the user can clearly see whether the table is filtered or not. This approach makes searching fast, safe, and intuitive without altering the original data.

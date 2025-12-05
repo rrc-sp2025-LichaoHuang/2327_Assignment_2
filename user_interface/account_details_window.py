@@ -20,6 +20,8 @@ class AccountDetailsWindow(DetailsWindow):
     def __init__(self, account: BankAccount):
         """
         Initialize the transaction window for a specific account.
+
+        Args: account(BankAccount): client's account.
         """
         super().__init__()
 

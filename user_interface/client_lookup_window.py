@@ -30,6 +30,9 @@ class ClientLookupWindow(LookupWindow):
         self.client_number_edit.textChanged.connect(self.on_text_changed)
         self.account_table.cellClicked.connect(self.on_select_account)
 
+        # Assignment 5
+        self.filter_button.clicked.connect(self.__on_filter_clicked)
+
 
     # ------------------------------------------------------------------
     def on_lookup_client(self):
@@ -114,6 +117,8 @@ class ClientLookupWindow(LookupWindow):
         # Auto-adjust column sizes so text is not cut off
         self.account_table.resizeColumnsToContents()
 
+        self.__toggle_filter(False)
+
 
     # ------------------------------------------------------------------
     def on_text_changed(self):
@@ -134,11 +139,9 @@ class ClientLookupWindow(LookupWindow):
         """
         Runs when the user clicks on any cell in the account table.
 
-        Steps:
-        - Read the account number from the row
-        - Validate it
-        - Find the BankAccount object
-        - Open the Account Details window
+        Args: 
+            row(int): row number.
+            column(int): column number.
         """
 
         # Get the account number from the first column
@@ -169,7 +172,7 @@ class ClientLookupWindow(LookupWindow):
 
         
 
-        # Everything is valid → open the Account Details dialog
+        # Everything is valid: open the Account Details dialog
         account = self.accounts[account_number]
         window = AccountDetailsWindow(account)
         window.balance_updated.connect(self.save_account_changes)
@@ -179,9 +182,77 @@ class ClientLookupWindow(LookupWindow):
         """
         This method is called when the AccountDetailsWindow emits balance_updated.
         It writes the updated account info back into the CSV file and refreshes the table.
+
+        Args:
+            updated_account(BankAccount): account number.
         """
         # Write the updated account to CSV
         update_data(updated_account)
 
         # Refresh table output so balance updates instantly
         self.on_lookup_client()
+
+    # Assignment 5
+    def __on_filter_clicked(self):
+        """
+        Slot for filter_button clicked.
+        Applies or resets the filter based on button text.
+        """
+        # If button text = Apply Filter: user is applying filtering
+        if self.filter_button.text() == "Apply Filter":
+            column_index = self.filter_combo_box.currentIndex()
+            search_text = self.filter_edit.text().strip().lower()
+
+            # Loop through table rows
+            row_count = self.account_table.rowCount()
+            for row in range(row_count):
+                item = self.account_table.item(row, column_index)
+                if item:
+                    cell_text = item.text().lower()
+                    match = search_text in cell_text
+                else:
+                    match = False
+
+                self.account_table.setRowHidden(row, not match)
+
+            # Filtering applied: toggle UI
+            self.__toggle_filter(True)
+
+        # If button text = Reset: turn off filtering
+        else:
+            self.__toggle_filter(False)
+
+
+    def __toggle_filter(self, filter_on: bool):
+        """
+        Toggles UI based on filtering state.
+
+        Args:
+            filter_on(boolean): filter on or off.  
+        """
+        self.filter_button.setEnabled(True)
+
+        if filter_on:
+            # Filtering is ON
+            self.filter_button.setText("Reset")
+            self.filter_combo_box.setEnabled(False)
+            self.filter_edit.setEnabled(False)
+            self.filter_label.setText("Data is Currently Filtered")
+
+        else:
+            # Filtering OFF
+            self.filter_button.setText("Apply Filter")
+            self.filter_combo_box.setEnabled(True)
+            self.filter_edit.setEnabled(True)
+            self.filter_edit.setText("")
+            self.filter_combo_box.setCurrentIndex(0)
+
+            # Restore all rows
+            row_count = self.account_table.rowCount()
+            for row in range(row_count):
+                self.account_table.setRowHidden(row, False)
+
+            self.filter_label.setText("Data is Not Currently Filtered")
+
+
+    
